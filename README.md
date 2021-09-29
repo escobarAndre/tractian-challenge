@@ -1,6 +1,6 @@
 # tractian-ae
 
-Projeto criado para o desafio da empresa tractian, vaga para Front en Engineer.
+Projeto criado para o desafio da empresa tractian, vaga para Front end Engineer.
 
 ## Build Setup
 
