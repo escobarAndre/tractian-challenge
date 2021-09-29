@@ -22,20 +22,38 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <p style="color:white; marginTop: 26rem">{{dateHour}}{{date()}}</p>
     </v-navigation-drawer>
 
     <v-app-bar id="header" app>
       <!-- HEADER -->
-      <button></button>
+      <div>
+        <h4 v-if="!dados">Ativos da empresa : {{ name }}</h4>
+        <h4 v-if="!user">Usuarios da empresa : {{ name }}</h4>
+      </div>
     </v-app-bar>
 
     <!-- CONTENT -->
     <v-main id="content">
       <v-container fluid>
         <visao-geral-btn v-if="!dados"></visao-geral-btn>
-        <v-btn v-if="!dados" color="white" style="color: black" class="mt-5" elevation="2">Atualizar ativos</v-btn>
+        <v-btn
+          v-if="!dados"
+          color="white"
+          style="color: black"
+          class="mt-5"
+          elevation="2"
+          >Atualizar ativos</v-btn
+        >
         <tabela-users v-if="!user"></tabela-users>
-        <v-btn v-if="!user" color="white" style="color: black" class="mt-5" elevation="2">Atualizar usuarios</v-btn>
+        <v-btn
+          v-if="!user"
+          color="white"
+          style="color: black"
+          class="mt-5"
+          elevation="2"
+          >Atualizar usuarios</v-btn
+        >
         <div>
           <graficos-ativos></graficos-ativos>
         </div>
@@ -44,19 +62,32 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
+      dateHour: '',
+      name: "",
       user: true,
       dados: false,
       items: [
         ["mdi-chart-bar", "Ativos"],
         ["mdi-account-supervisor-circle", "Usuarios"],
-        ["mdi-clock-start", "Clock-in"],
       ],
     };
   },
   methods: {
+    date() {
+      setInterval(() => {
+        const data = new Date();
+        this.dateHour = Date()
+        // console.log(data)
+        // this.dateHour = `${data.getHours()}:${data.getMinutes()}:${data.getSeconds()} - ${data.getDate()}/${data.getMonth()}/${data.getFullYear()}`;
+        // // console.log( this.dateHour.toISOString())
+        return this.dateHour
+      }, 1000);
+    },
     click(name) {
       if (name === "Ativos") {
         (this.dados = !this.dados), (this.user = !this.user);
@@ -65,7 +96,14 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    axios
+      .get("https://my-json-server.typicode.com/tractian/fake-api/companies")
+      .then((response) => {
+        const empresa = response.data;
+        this.name = empresa[0].name;
+      });
+  },
 };
 </script>
 
